@@ -4,7 +4,7 @@ setup(
     name='src',
     packages=find_packages(),
     version='0.1.0',
-    description='Hack for LA analysis of parking citation data',
-    author='Hack for LA Lucky Parking Project',
+    description='Car make prediction based on Hack for LA Lucky Parking',
+    author='Greg Pawin',
     license='MIT',
 )

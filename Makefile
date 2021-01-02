@@ -7,7 +7,7 @@
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 BUCKET = lucky-parking-storage
 PROFILE = default
-PROJECT_NAME = lucky-parking-analysis
+PROJECT_NAME = lucky-make-prediction
 PYTHON_INTERPRETER = python3
 
 ifeq (,$(shell which conda))
