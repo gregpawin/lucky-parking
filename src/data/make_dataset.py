@@ -86,13 +86,29 @@ def create_sample(
     print("Creating sample")
 
     # Read raw data and skiprows using random.random()
-    pd.read_csv(
+    df = pd.read_csv(
         target_file,
         header=0,
-        index_col=0,
+        usecols=["Make", "Violation Description"],
         skiprows=lambda i: i > 0 and random.random() > sample_frac,
         low_memory=False,
-    ).reset_index(drop=True).to_csv(SAMPLE_FILEPATH, index=False)
+    ).reset_index(drop=True)
+
+    df.columns = [
+        # "state_plate",
+        "make",
+        # "body_style",
+        # "color",
+        # "location",
+        # "violation_code",
+        "violation_description",
+        # "fine_amount",
+        # "Latitude",
+        # "Longitude",
+        # "datetime",
+    ]
+
+    df.to_csv(SAMPLE_FILEPATH, index=False)
 
     print("Sample complete")
 
@@ -114,58 +130,58 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     df = pd.read_csv(target_file, low_memory=False)
 
     # Select columns of interest
-    df = df[
-        [
-            "Issue Date",
-            "Issue time",
-            "RP State Plate",
-            "Make",
-            "Body Style",
-            "Color",
-            "Location",
-            "Violation code",
-            "Violation Description",
-            "Fine amount",
-            "Latitude",
-            "Longitude",
-        ]
-    ]
+    # df = df[
+    #     [
+    #         # "Issue Date",
+    #         # "Issue time",
+    #         # "RP State Plate",
+    #         "Make",
+    #         # "Body Style",
+    #         # "Color",
+    #         # "Location",
+    #         # "Violation code",
+    #         "Violation Description",
+    #         # "Fine amount",
+    #         # "Latitude",
+    #         # "Longitude",
+    #     ]
+    # ]
 
     # Filter out data points with bad coordinates
-    df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
+    # df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
 
     # Filter out data points with no time/date stamps
-    df = df[
-        (df["Issue Date"].notna())
-        & (df["Issue time"].notna())
-        & (df["Fine amount"].notna())
-    ]
+    # df = df[
+    #     (df["Issue Date"].notna())
+    #     & (df["Issue time"].notna())
+    #     & (df["Fine amount"].notna())
+    # ]
 
     # Convert Issue time and Issue Date strings into a combined datetime type
-    df["Issue time"] = df["Issue time"].apply(
-        lambda x: "0" * (4 - len(str(int(x)))) + str(int(x))
-    )
-    df["Datetime"] = pd.to_datetime(
-        df["Issue Date"] + " " + df["Issue time"], format="%m/%d/%Y %H%M"
-    )
+    # df["Issue time"] = df["Issue time"].apply(
+    #     lambda x: "0" * (4 - len(str(int(x)))) + str(int(x))
+    # )
+    # df["Datetime"] = pd.to_datetime(
+    #     df["Issue Date"] + " " + df["Issue time"], format="%m/%d/%Y %H%M"
+    # )
 
     # Drop original date/time columns
-    df = df.drop(["Issue Date", "Issue time"], axis=1)
+    # df = df.drop(["Issue Date", "Issue time"], axis=1)
 
     # Make column names more coding friendly except for Lat/Lon
-    df.columns = [
-        "state_plate",
-        "make",
-        "body_style",
-        "color",
-        "location",
-        "violation_code",
-        "violation_description",
-        "fine_amount",
-        "Latitude",
-        "Longitude",
-        "datetime",
-    ]
+    # df.columns = [
+    #     # "state_plate",
+    #     "make",
+    #     # "body_style",
+    #     # "color",
+    #     # "location",
+    #     # "violation_code",
+    #     "violation_description",
+    #     # "fine_amount",
+    #     # "Latitude",
+    #     # "Longitude",
+    #     # "datetime",
+    # ]
 
     # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
@@ -176,31 +192,31 @@ def clean(target_file: Union[Path, str], output_filedir: str):
         df = df.replace(data["alias"], data["make"])
 
     # Instantiate projection converter and change projection
-    transformer = Transformer.from_crs("epsg:2229", "epsg:4326")
-    df["latitude"], df["longitude"] = transformer.transform(
-        df["Latitude"].values, df["Longitude"].values
-    )
+    # transformer = Transformer.from_crs("epsg:2229", "epsg:4326")
+    # df["latitude"], df["longitude"] = transformer.transform(
+    #     df["Latitude"].values, df["Longitude"].values
+    # )
 
     # Drop original coordinate columns
-    df = df.drop(["Latitude", "Longitude"], axis=1)
+    # df = df.drop(["Latitude", "Longitude"], axis=1)
     # df.reset_index(drop=True,inplace=True)
     # df.drop('Ticket number', axis=1)
 
     # Extract weekday and add as column
-    df["weekday"] = df.datetime.dt.weekday.astype(str).replace(
-        {
-            "0": "Monday",
-            "1": "Tuesday",
-            "2": "Wednesday",
-            "3": "Thursday",
-            "4": "Friday",
-            "5": "Saturday",
-            "6": "Sunday",
-        }
-    )
+    # df["weekday"] = df.datetime.dt.weekday.astype(str).replace(
+    #     {
+    #         "0": "Monday",
+    #         "1": "Tuesday",
+    #         "2": "Wednesday",
+    #         "3": "Thursday",
+    #         "4": "Friday",
+    #         "5": "Saturday",
+    #         "6": "Sunday",
+    #     }
+    # )
 
     # Set fine amount as int
-    df["fine_amount"] = df.fine_amount.astype(int)
+    # df["fine_amount"] = df.fine_amount.astype(int)
 
     # Drop filtered index and add new one
     df.reset_index(drop=True, inplace=True)
@@ -223,8 +239,11 @@ if __name__ == "__main__":
 
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables
-    load_dotenv(find_dotenv())
-
+    if bool(find_dotenv()):
+        load_dotenv(find_dotenv())
+    else:
+        with open(PROJECT_DIR / ".env", "w"):
+            pass
     # Create data folders
     data_folders = ["raw", "interim", "external", "processed"]
     if not os.path.exists(PROJECT_DIR / "data"):

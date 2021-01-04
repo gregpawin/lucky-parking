@@ -1,11 +1,13 @@
-Lucky Parking Car Make Prediction Project
+# Lucky Parking Car Make Prediction Project
 ==============================
 
 Prototype car make prediction project as offshoot of [Hack for LA's Lucky Parking Project](https://www.hackforla.org/projects/lucky-parking). A Plotly-based webapp that predicts a user's car make from user input
 based on parking citation data collected by the [City of Los Angeles](https://data.lacity.org/A-Well-Run-City/Parking-Citations/wjz9-h9np).
 
-Instructions on setting up the project enviornment and how to download the original dataset.
 
+
+# Instructions on setting up the project enviornment and how to download the original dataset
+==============================
 
 - Run `make create_environment`
 - Make sure that your new lucky-parking-analysis environment is activated
