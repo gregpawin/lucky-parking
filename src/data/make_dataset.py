@@ -219,8 +219,8 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     # df["fine_amount"] = df.fine_amount.astype(int)
 
     # Cleaned misspelled violation description
-    df = df.replace('PARKED OVER TIME LIM', 'PARKED OVER TIME LIMIT')
-    df = df.replace('NO STOP/STAND', 'NO STOP/STANDING')
+    df = df.replace("PARKED OVER TIME LIM", "PARKED OVER TIME LIMIT")
+    df = df.replace("NO STOP/STAND", "NO STOP/STANDING")
 
     # Drop filtered index and add new one
     df.reset_index(drop=True, inplace=True)
