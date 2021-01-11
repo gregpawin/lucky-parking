@@ -14,5 +14,5 @@ matplotlib
 plotly
 ipywidgets
 plotly-geo
-chart-studio
-sqlalchemy
+scikit-learn
+seaborn
