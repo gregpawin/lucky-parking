@@ -282,7 +282,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
         "80692": "COMVEH RES/OV TM LMT",
         "17104H": "LOAD/UNLOAD ONLY",
         "80.58.1": "CARSHARE PARKING",
-        "80.69AP+": "NO STOP/STANDING",
+        "80.69AP+": "STOP/STAND PROHIBIT", #Changed from 'NO STOP/STANDING'
         "8056E1": "WHITE ZONE",
         "6344K2": "NO PARKING BETWEEN POSTED HOURS",
         "80.58L": "PREFERENTIAL PARKING",
@@ -298,7 +298,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
         "22507A": "OVERSIZED VEHICLE PARKING TOPHAM ST",
         "22500L-": "DP-BLKNG ACCESS RAMP",
         "80661D": "RESTRICTED ZONE",
-        "80.69AA+": "NO STOP/STAND",
+        "80.69AA+": "STOP/STAND PROHIBIT", #Changed from "NO STOP/STAND"
         "22500H": "DOUBLE PARKING",
         "572521D": "MT FIRE RD NO PERMIT",
         "87.55": "FOR SALE SIGN",
