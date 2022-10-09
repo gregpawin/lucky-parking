@@ -124,7 +124,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
 
     # Iterate over makes and replace aliases
     for row in vio_regex.itertuples():
-        df = df.replace(row[2], row[1])
+        df = df.replace(row[2], row[1], regex=True)
 
     # Top violations to keep (Top 59 by count)
     with open(PROJECT_DIR / 'references/top_violations.txt', 'r') as file:

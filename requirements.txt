@@ -8,12 +8,15 @@ coverage
 awscli
 flake8
 pylint
+pandas
 geopandas
 matplotlib
 sqlalchemy
 geoalchemy2
-ipython
 python-dotenv
 psycopg2-binary
 praw
 nltk
+ipykernel
+notebook
+urllib3
