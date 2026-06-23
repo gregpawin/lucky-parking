@@ -11,6 +11,9 @@ storybook-static/
 .pnp.js
 node_modules/
 
+# Python virtual environments
+.venv/
+
 # Deployment
 .vercel/
 
@@ -36,3 +39,5 @@ coverage/
 
 # TypeScript
 **/*.tsbuildinfo
+
+raw_data/
