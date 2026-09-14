@@ -1,0 +1,20 @@
+{
+	"name": "@lucky-parking/contracts",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "tsc",
+		"check-types": "tsc --noEmit",
+		"clean": "rimraf .turbo dist node_modules",
+		"dev": "tsc --watch",
+		"format": "prettier . --check --ignore-unknown",
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern"
+	},
+	"devDependencies": {
+		"@lucky-parking/configs": "workspace:^",
+		"@typescript/native": "catalog:tooling",
+		"typescript": "catalog:tooling"
+	}
+}
