@@ -1,5 +1,7 @@
 # Overview
 
+> **Local PostGIS update:** The main website now uses its Next.js server proxy to call `apps/data-service` (FastAPI/PostGIS). See [the current workflows](../apps/data-service/deploy/README.md). The Socrata/MongoDB architecture below describes the earlier implementation; cloud integration is still planned.
+
 ## Mission
 
 **Lucky Parking** is a [Hack for LA](https://www.hackforla.org/) project that helps city planners and community members explore Los Angeles parking citation data and make informed decisions about parking policy.
@@ -19,7 +21,7 @@ The project is **not complete**. The web app, API, and new data pipeline were bu
 | Frontend / full-stack developers | [Web application](./03-web-application.md), [Monorepo structure](./02-monorepo-structure.md) |
 | Data / analytics contributors | [Data pipeline](./05-data-pipeline.md), [Data sources & schemas](./07-data-sources-and-schemas.md) |
 | API / infra contributors | [Backend API](./04-backend-api.md), [Monorepo structure](./02-monorepo-structure.md) |
-| New contributors | This page → [Monorepo structure](./02-monorepo-structure.md) → area of interest |
+| New contributors | This page â†’ [Monorepo structure](./02-monorepo-structure.md) â†’ area of interest |
 
 ## System at a glance
 
@@ -29,7 +31,7 @@ flowchart LR
         Browser[Browser]
     end
 
-    subgraph web [Web tier — active]
+    subgraph web [Web tier â€” active]
         Next["Next.js app<br/>/parking-insights"]
         Config["/api/v1/public/config"]
     end
@@ -39,12 +41,12 @@ flowchart LR
         Mapbox["Mapbox<br/>maps + geocoding"]
     end
 
-    subgraph api [API tier — legacy / unused by web]
+    subgraph api [API tier â€” legacy / unused by web]
         Express["Express API"]
         MongoDB[(MongoDB)]
     end
 
-    subgraph data [Data tier — beta pipeline]
+    subgraph data [Data tier â€” beta pipeline]
         Pipeline["beta_pipeline<br/>Python + Polars"]
         SQLite[(SQLite)]
         PostGIS[(PostGIS)]
@@ -67,19 +69,19 @@ flowchart LR
 
 The same underlying citation records can flow through three different paths today:
 
-### 1. Web app → Socrata (live, limited)
+### 1. Web app â†’ Socrata (live, limited)
 
 The Next.js app queries the [Socrata Query API v3](https://dev.socrata.com/docs/queries/) directly. Users pick a date range and up to two geographic areas; the app fetches matching citations and renders them on a Mapbox map.
 
 **Limitation:** Results are capped at **50 rows** per query (pagination not implemented). See [Web application](./03-web-application.md).
 
-### 2. Beta pipeline → SQLite / PostGIS (local analytics)
+### 2. Beta pipeline â†’ SQLite / PostGIS (local analytics)
 
 The `data-science/beta_pipeline/` Python tools stream the ~6 GB CSV into SQLite or PostGIS using Polars batches. SQLite supports **incremental API sync**; PostGIS supports **spatial queries** and a cleaned analytics table.
 
 **Limitation:** PostGIS does not yet have API sync. The web app does not read from these databases. See [Data pipeline](./05-data-pipeline.md).
 
-### 3. Legacy pipeline → normalized PostGIS (older dataset)
+### 3. Legacy pipeline â†’ normalized PostGIS (older dataset)
 
 The `data-science/src/data/` scripts and Makefile target an **older dataset ID** (`wjz9-h9np`) and a normalized relational schema (`citation`, `vehicle`, `make`, etc.). This path predates the beta pipeline.
 
@@ -100,7 +102,7 @@ The `data-science/src/data/` scripts and Makefile target an **older dataset ID**
 
 ## Primary dataset
 
-All current-facing work uses the LA City Open Data dataset **[Parking Citations (`4f5p-udkv`)](https://data.lacity.org/Transportation/Parking-Citations/4f5p-udkv)** — millions of rows, ~6 GB as CSV, updated on a rolling basis by the city.
+All current-facing work uses the LA City Open Data dataset **[Parking Citations (`4f5p-udkv`)](https://data.lacity.org/Transportation/Parking-Citations/4f5p-udkv)** â€” millions of rows, ~6 GB as CSV, updated on a rolling basis by the city.
 
 Details: [Data sources & schemas](./07-data-sources-and-schemas.md).
 

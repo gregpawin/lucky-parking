@@ -1,6 +1,8 @@
 # Web application
 
-The primary user-facing application lives in `apps/web` — a **Next.js 16** app that visualizes LA parking citations on an interactive Mapbox map.
+> **Local PostGIS update:** The main website now uses its Next.js server proxy to call `apps/data-service` (FastAPI/PostGIS). See [the current workflows](../apps/data-service/deploy/README.md). The Socrata/MongoDB architecture below describes the earlier implementation; cloud integration is still planned.
+
+The primary user-facing application lives in `apps/web` â€” a **Next.js 16** app that visualizes LA parking citations on an interactive Mapbox map.
 
 **Route:** `/parking-insights` (root `/` redirects here)
 
@@ -16,16 +18,16 @@ Users can:
 
 ```mermaid
 flowchart TB
-    subgraph sidebar [Sidebar — DataPanel]
+    subgraph sidebar [Sidebar â€” DataPanel]
         Places[Place search + list]
         Dates[Date range picker]
-        Stats[DataVisuals — totals]
+        Stats[DataVisuals â€” totals]
         Legend[DataLegend]
         About[About section]
     end
 
-    subgraph map [Map — ParkingCitationsMap]
-        Source[MapSourceCitations — GeoJSON]
+    subgraph map [Map â€” ParkingCitationsMap]
+        Source[MapSourceCitations â€” GeoJSON]
         Circles[MapLayerCircles]
         Heat[MapLayerHeatmap]
         Popup[Click popups]
@@ -33,7 +35,7 @@ flowchart TB
 
     subgraph state [Client state]
         Store[Zustand store]
-        RQ[React Query — useCitations]
+        RQ[React Query â€” useCitations]
     end
 
     Places --> Store
@@ -178,7 +180,7 @@ Free tokens: [Mapbox](https://account.mapbox.com/), [LA City Data / Socrata](htt
 | **No backend API usage** | architecture | Cannot leverage MongoDB-preloaded data |
 | **Legend placeholder** | `data-legend.tsx` TODO | Legend may not reflect real violation categories |
 | **Geocoder edge cases** | `use-geocoder.tsx` TODO | Address/postcode result types not fully handled |
-| **No offline/local DB mode** | — | Pipeline databases not wired to web |
+| **No offline/local DB mode** | â€” | Pipeline databases not wired to web |
 
 See [Roadmap](./08-roadmap-and-open-questions.md) for planned fixes and integration options.
 

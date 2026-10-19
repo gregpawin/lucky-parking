@@ -1,8 +1,10 @@
 # Roadmap and open questions
 
+> **Local PostGIS update:** The main website now uses its Next.js server proxy to call `apps/data-service` (FastAPI/PostGIS). See [the current workflows](../apps/data-service/deploy/README.md). The Socrata/MongoDB architecture below describes the earlier implementation; cloud integration is still planned.
+
 Lucky Parking is an active Hack for LA project with **multiple partially overlapping systems**. This page catalogs what is unfinished, known bugs, and reasonable directions the project could take.
 
-**Status key:** ✅ Done · 🟡 Partial · 🔴 Not started / broken · 📋 Documented but missing
+**Status key:** âœ… Done Â· ðŸŸ¡ Partial Â· ðŸ”´ Not started / broken Â· ðŸ“‹ Documented but missing
 
 ## Integration map (today)
 
@@ -22,10 +24,10 @@ flowchart TB
     end
 
     subgraph missing [Not connected / missing]
-        WEB_API[Web → Express API]
-        API_DB[API → MongoDB populated]
+        WEB_API[Web â†’ Express API]
+        API_DB[API â†’ MongoDB populated]
         PG_SYNC[PostGIS API sync]
-        WEB_DB[Web → local DB]
+        WEB_DB[Web â†’ local DB]
         VIO_NB[violation_analysis notebook]
         ENV_EX[.env.example in beta_pipeline]
     end
@@ -42,54 +44,54 @@ flowchart TB
 
 | Item | Status | Location | Notes |
 |------|--------|----------|-------|
-| Socrata pagination | 🔴 | `apps/web/src/lib/socrata/parking-citations.ts:73` | Hard `pageSize: 50`; FIXME comment |
-| Map legend accuracy | 🔴 | `apps/web/src/components/data-legend.tsx` | TODO: use real violation categories |
-| Geocoder address/postcode handling | 🟡 | `apps/web/src/hooks/use-geocoder.tsx:65` | TODO for some result types |
-| Connect to backend API | 🔴 | architecture | Web bypasses `apps/api` entirely |
-| Connect to local PostGIS/SQLite | 🔴 | architecture | Pipeline output unused by web |
-| Automated tests | 🔴 | `apps/web` | No substantive test suite |
+| Socrata pagination | ðŸ”´ | `apps/web/src/lib/socrata/parking-citations.ts:73` | Hard `pageSize: 50`; FIXME comment |
+| Map legend accuracy | ðŸ”´ | `apps/web/src/components/data-legend.tsx` | TODO: use real violation categories |
+| Geocoder address/postcode handling | ðŸŸ¡ | `apps/web/src/hooks/use-geocoder.tsx:65` | TODO for some result types |
+| Connect to backend API | ðŸ”´ | architecture | Web bypasses `apps/api` entirely |
+| Connect to local PostGIS/SQLite | ðŸ”´ | architecture | Pipeline output unused by web |
+| Automated tests | ðŸ”´ | `apps/web` | No substantive test suite |
 
 ### Backend API
 
 | Item | Status | Location | Notes |
 |------|--------|----------|-------|
-| Used by frontend | 🔴 | — | Express API is orphaned |
-| Env var naming bug | 🔴 | `citations.ts` vs `.env.schema` | Code uses `COL_CITATIONS`, schema says `COL_NAME_CITATIONS` |
-| GeoPolygon validation | 🟡 | `apps/api/src/utilities/schemas.ts` | TODO: proper Zod schema (`z.any()` today) |
-| Dataset ID alignment | 🔴 | OpenAPI external docs | May reference `wjz9-h9np` vs current `4f5p-udkv` |
-| Ingestion into MongoDB | 🔴 | — | No pipeline loads current dataset into API DB |
-| Automated tests | 🔴 | `apps/api` | Minimal coverage |
+| Used by frontend | ðŸ”´ | â€” | Express API is orphaned |
+| Env var naming bug | ðŸ”´ | `citations.ts` vs `.env.schema` | Code uses `COL_CITATIONS`, schema says `COL_NAME_CITATIONS` |
+| GeoPolygon validation | ðŸŸ¡ | `apps/api/src/utilities/schemas.ts` | TODO: proper Zod schema (`z.any()` today) |
+| Dataset ID alignment | ðŸ”´ | OpenAPI external docs | May reference `wjz9-h9np` vs current `4f5p-udkv` |
+| Ingestion into MongoDB | ðŸ”´ | â€” | No pipeline loads current dataset into API DB |
+| Automated tests | ðŸ”´ | `apps/api` | Minimal coverage |
 
 ### Beta data pipeline
 
 | Item | Status | Location | Notes |
 |------|--------|----------|-------|
-| SQLite CSV + API sync | ✅ | `parking_db.py` | Production-ready for local use |
-| PostGIS CSV + clean | ✅ | `parking_postgis.py`, `parking_clean.py` | Full pipeline works |
-| PostGIS API sync | 🔴 | ARCHITECTURE.md | Copy from SQLite, add geom handling |
-| Incremental clean rebuild | 🔴 | `parking_clean.py` | Full TRUNCATE each time |
-| Scheduled sync / load | 🔴 | — | No cron/CI automation |
-| `.env.example` file | 📋 | README references it | File not in repo |
-| `violation_analysis.ipynb` | 🔴 | stub imports only | Analysis not written |
-| Web/API consumption | 🔴 | — | Databases are offline analytics only |
+| SQLite CSV + API sync | âœ… | `parking_db.py` | Production-ready for local use |
+| PostGIS CSV + clean | âœ… | `parking_postgis.py`, `parking_clean.py` | Full pipeline works |
+| PostGIS API sync | ðŸ”´ | ARCHITECTURE.md | Copy from SQLite, add geom handling |
+| Incremental clean rebuild | ðŸ”´ | `parking_clean.py` | Full TRUNCATE each time |
+| Scheduled sync / load | ðŸ”´ | â€” | No cron/CI automation |
+| `.env.example` file | ðŸ“‹ | README references it | File not in repo |
+| `violation_analysis.ipynb` | ðŸ”´ | stub imports only | Analysis not written |
+| Web/API consumption | ðŸ”´ | â€” | Databases are offline analytics only |
 
 ### Legacy data science
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Makefile ETL | 🟡 | Works for old dataset/schema; not maintained for `4f5p-udkv` |
-| Sphinx docs | 🟡 | Some commands documented but not in Makefile |
-| S3 sync | 📋 | Referenced in docs, not implemented in Makefile |
-| Cookiecutter `src/models`, `src/features` | 🔴 | Never added; only `src/data/` exists |
-| Archived ML notebooks | 🟡 | Historical; not validated against current data |
+| Makefile ETL | ðŸŸ¡ | Works for old dataset/schema; not maintained for `4f5p-udkv` |
+| Sphinx docs | ðŸŸ¡ | Some commands documented but not in Makefile |
+| S3 sync | ðŸ“‹ | Referenced in docs, not implemented in Makefile |
+| Cookiecutter `src/models`, `src/features` | ðŸ”´ | Never added; only `src/data/` exists |
+| Archived ML notebooks | ðŸŸ¡ | Historical; not validated against current data |
 
 ### Repository / ops
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Root `pnpm test` | 🟡 | Task exists; apps lack meaningful tests |
-| Branch naming docs | 🟡 | CONTRIBUTING mentions `master`/`dev`; CI may use `main`/`stable` |
-| Monorepo Python tooling | 🔴 | Python lives outside pnpm; no unified root Python project |
+| Root `pnpm test` | ðŸŸ¡ | Task exists; apps lack meaningful tests |
+| Branch naming docs | ðŸŸ¡ | CONTRIBUTING mentions `master`/`dev`; CI may use `main`/`stable` |
+| Monorepo Python tooling | ðŸ”´ | Python lives outside pnpm; no unified root Python project |
 
 ## Code-tracked TODOs / FIXMEs
 
@@ -102,9 +104,9 @@ flowchart TB
 
 ## Strategic forks (where the project could go)
 
-### Path A — "Live Socrata first" (minimal change)
+### Path A â€” "Live Socrata first" (minimal change)
 
-Improve the current web → Socrata path:
+Improve the current web â†’ Socrata path:
 
 - Implement client-side pagination in `fetchParkingCitations`
 - Add loading states and rate-limit handling
@@ -114,7 +116,7 @@ Improve the current web → Socrata path:
 
 **Risk:** Socrata rate limits and latency at scale; still no offline analysis parity with pipeline.
 
-### Path B — "PostGIS as source of truth"
+### Path B â€” "PostGIS as source of truth"
 
 Make `beta_pipeline` + PostGIS the backend for everything:
 
@@ -127,11 +129,11 @@ Make `beta_pipeline` + PostGIS the backend for everything:
 
 **Risk:** Ops cost; need ingestion monitoring and auth for public API.
 
-### Path C — "Revive MongoDB API"
+### Path C â€” "Revive MongoDB API"
 
 Populate MongoDB from pipeline exports; web switches to existing OpenAPI contract:
 
-- ETL job: PostGIS/SQLite → GeoJSON documents → MongoDB
+- ETL job: PostGIS/SQLite â†’ GeoJSON documents â†’ MongoDB
 - Fix env var bug and GeoPolygon schema
 - Update dataset to `4f5p-udkv`
 
@@ -139,7 +141,7 @@ Populate MongoDB from pipeline exports; web switches to existing OpenAPI contrac
 
 **Risk:** Two storage systems (PostGIS for analytics, Mongo for API) unless Mongo becomes sole store.
 
-### Path D — "Analytics focus"
+### Path D â€” "Analytics focus"
 
 Prioritize data science deliverables over web integration:
 
@@ -149,7 +151,7 @@ Prioritize data science deliverables over web integration:
 
 **Best if:** Primary stakeholders are researchers/policy analysts, not public map users.
 
-### Path E — "Consolidate and deprecate"
+### Path E â€” "Consolidate and deprecate"
 
 Remove or archive legacy paths to reduce contributor confusion:
 
@@ -182,7 +184,7 @@ gantt
         Wire web to internal API              :d2, 2026-09, 4w
 ```
 
-*Timeline is illustrative — not a committed project plan.*
+*Timeline is illustrative â€” not a committed project plan.*
 
 ## Open questions for the team
 
@@ -192,7 +194,7 @@ gantt
 4. **Who hosts PostGIS in production?** Docker locally only vs cloud managed service.
 5. **Are ticket corrections important?** If yes, move from `INSERT OR IGNORE` to upsert.
 6. **Should violation normalization (`references/`) feed into `citations_clean`?**
-7. **What is the public deployment target?** OpenAPI references `luckyparking.org` — document actual infra.
+7. **What is the public deployment target?** OpenAPI references `luckyparking.org` â€” document actual infra.
 
 ## How to update this doc
 

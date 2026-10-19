@@ -13,6 +13,17 @@ storybook-static/
 .pnp/
 .pnp.js
 node_modules/
+**/node_modules/
+**/.venv/
+**/__pycache__/
+**/raw_data/
+**/dumps/
+**/boundaries/
+projects/
+apps/data-service/
+**/.pytest_cache/
+**/.next/
+**/.turbo/
 
 # Deployment
 .vercel/

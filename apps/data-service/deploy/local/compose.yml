@@ -1,0 +1,24 @@
+# Merge with docker-compose.yml, which must be the first Compose file.
+# Run scripts/start.cmd or bash scripts/start.sh from apps/data-service.
+services:
+  website:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    environment:
+      PARKING_API_URL: http://api:8000
+      PARKING_API_KEY: ${PARKING_API_KEY:-}
+      MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN:-}
+    ports:
+      - "127.0.0.1:${WEBSITE_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/v1/public/config').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

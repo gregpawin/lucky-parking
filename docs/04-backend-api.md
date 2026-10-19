@@ -1,5 +1,7 @@
 # Backend API
 
+> **Local PostGIS update:** The main website now uses its Next.js server proxy to call `apps/data-service` (FastAPI/PostGIS). See [the current workflows](../apps/data-service/deploy/README.md). The Socrata/MongoDB architecture below describes the earlier implementation; cloud integration is still planned.
+
 The `apps/api` package is an **Express 4** REST service that queries parking citations from **MongoDB** using geospatial and date filters.
 
 **Important:** The current Next.js web app does **not** use this API. It queries Socrata directly. Treat this service as **legacy / alternate backend** until integration work is done.
@@ -8,8 +10,8 @@ The `apps/api` package is an **Express 4** REST service that queries parking cit
 
 Provide a stable API for filtering citations by:
 
-- **Date range** — `issue_date` between two ISO datetimes
-- **Geography** — GeoJSON polygon (`$geoWithin`)
+- **Date range** â€” `issue_date` between two ISO datetimes
+- **Geography** â€” GeoJSON polygon (`$geoWithin`)
 
 This would allow pre-indexed queries over a full local copy of citations instead of live Socrata calls.
 
@@ -115,7 +117,7 @@ Contributors must set the variable name the code actually uses, or fix the misma
 | `src/services/citations.ts` | MongoDB query |
 | `src/database/client.ts` | Mongo client |
 | `src/middleware/validator.ts` | Zod request validation |
-| `src/utilities/schemas.ts` | Zod schemas (GeoPolygon is `z.any()` — TODO) |
+| `src/utilities/schemas.ts` | Zod schemas (GeoPolygon is `z.any()` â€” TODO) |
 
 ## Relationship to other systems
 
@@ -127,7 +129,7 @@ flowchart TB
         WEB --> SOC
     end
 
-    subgraph api_path [API path — not connected]
+    subgraph api_path [API path â€” not connected]
         API[apps/api]
         MONGO[(MongoDB)]
         API --> MONGO
@@ -156,15 +158,15 @@ No automated job today loads `beta_pipeline` output into MongoDB for the API.
 | Env var naming (`COL_CITATIONS`) | Bug / inconsistency |
 | Full GeoPolygon Zod schema | TODO in `schemas.ts` |
 | Dataset alignment (`4f5p-udkv` vs `wjz9-h9np`) | Needs migration plan |
-| Ingestion pipeline → MongoDB | Not implemented in beta_pipeline |
+| Ingestion pipeline â†’ MongoDB | Not implemented in beta_pipeline |
 | Automated tests | Minimal / absent at app level |
 
 ## Possible directions
 
-1. **Retire the API** — If Socrata + local PostGIS meet all needs, deprecate MongoDB path and document removal.
-2. **Revive as BFF** — Express proxies to PostGIS (or SQLite) with the same filter contract as OpenAPI; web app switches from Socrata.
-3. **MongoDB as cache** — Scheduled job syncs Socrata or CSV into Mongo for GeoJSON-native `$geoWithin` queries.
-4. **Unify on PostGIS** — Single spatial database serves both analytics notebooks and a thin API layer (PostgREST, custom Express, or Next.js route handlers).
+1. **Retire the API** â€” If Socrata + local PostGIS meet all needs, deprecate MongoDB path and document removal.
+2. **Revive as BFF** â€” Express proxies to PostGIS (or SQLite) with the same filter contract as OpenAPI; web app switches from Socrata.
+3. **MongoDB as cache** â€” Scheduled job syncs Socrata or CSV into Mongo for GeoJSON-native `$geoWithin` queries.
+4. **Unify on PostGIS** â€” Single spatial database serves both analytics notebooks and a thin API layer (PostgREST, custom Express, or Next.js route handlers).
 
 Each option trades operational complexity against query performance and data freshness. See [Roadmap](./08-roadmap-and-open-questions.md).
 

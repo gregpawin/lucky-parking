@@ -22,6 +22,14 @@ workspace.
 | [`projects/`](../projects/)                            | Project-specific workspaces and tooling        |
 | [`projects/data-science/`](../projects/data-science)   | Parking citation analysis                      |
 
+## Local PostGIS workflow
+
+The main website can now use the shared Python/PostGIS data service in
+[`apps/data-service`](../apps/data-service/). Start with [the three workflows](../apps/data-service/deploy/README.md)
+and [fully local setup](../apps/data-service/deploy/local/README.md).
+Only the fully local workflow is being implemented and tested in this phase.
+The Express/MongoDB backend below is an alternate legacy path.
+
 ## Getting Started
 
 ### Prerequisites
@@ -36,7 +44,7 @@ workspace.
 | [pnpm](https://pnpm.io/)        | JavaScript dependencies and monorepo workspace  |
 | [turbo](https://turborepo.dev/) | Task execution                                  |
 
-If a tool runs against this repository’s source/configuration or is needed after `pnpm install`, it belongs in pnpm. If
+If a tool runs against this repositoryâ€™s source/configuration or is needed after `pnpm install`, it belongs in pnpm. If
 it is needed before dependency installation or is language-agnostic/system-level, it belongs in mise.
 
 ### Setup
@@ -63,8 +71,7 @@ cp apps/api/.env.schema apps/api/.env
 
 Set the values required by each application:
 
-- `apps/web/.env` needs a [Mapbox](https://www.mapbox.com) access token and a
-  [Los Angeles City Data](https://data.lacity.org/login) Socrata app token.
+- `apps/web/.env` needs a [Mapbox](https://www.mapbox.com) access token and the local parking data API URL. The Socrata token belongs to the ingestion tools, not the browser.
 - `apps/api/.env` needs the MongoDB connection and collection values used by the API. Contact the Engineering Lead.
 
 Environment files can contain secrets. Do not commit them.
@@ -110,7 +117,7 @@ Run these from the repository root.
 | [Overview](./01-overview.md) | Project mission, high-level architecture, and how the pieces relate |
 | [Monorepo structure](./02-monorepo-structure.md) | Turborepo layout, packages, tooling, and local dev workflow |
 | [Web application](./03-web-application.md) | Next.js map app, state, Socrata integration, components |
-| [Backend API](./04-backend-api.md) | Express/MongoDB API — current status and contract |
+| [Backend API](./04-backend-api.md) | Express/MongoDB API â€” current status and contract |
 | [Data pipeline (beta)](./05-data-pipeline.md) | Polars + SQLite/PostGIS ingestion, CLI, schemas |
 | [Legacy data science](./06-legacy-data-science.md) | Older ETL, notebooks, and normalized PostGIS schema |
 | [Data sources & schemas](./07-data-sources-and-schemas.md) | Dataset IDs, column dictionary, reference files |
@@ -127,8 +134,8 @@ flowchart TB
     end
 
     subgraph monorepo [Lucky Parking monorepo]
-        WEB["apps/web — Next.js map"]
-        API["apps/api — Express + MongoDB"]
+        WEB["apps/web â€” Next.js map"]
+        API["apps/api â€” Express + MongoDB"]
         DS["data-science/beta_pipeline"]
         LEG["data-science/ (legacy)"]
     end
@@ -154,9 +161,9 @@ flowchart TB
 
 ## Related docs elsewhere in the repo
 
-- [`data-science/beta_pipeline/README.md`](../data-science/beta_pipeline/README.md) — quick start for the Python pipeline
-- [`data-science/beta_pipeline/ARCHITECTURE.md`](../data-science/beta_pipeline/ARCHITECTURE.md) — module-level code reference (complements [05-data-pipeline.md](./05-data-pipeline.md))
-- [`apps/api/src/docs/specs-v1.yaml`](../apps/api/src/docs/specs-v1.yaml) — OpenAPI spec for the citations API
+- [`data-science/beta_pipeline/README.md`](../data-science/beta_pipeline/README.md) â€” quick start for the Python pipeline
+- [`data-science/beta_pipeline/ARCHITECTURE.md`](../data-science/beta_pipeline/ARCHITECTURE.md) â€” module-level code reference (complements [05-data-pipeline.md](./05-data-pipeline.md))
+- [`apps/api/src/docs/specs-v1.yaml`](../apps/api/src/docs/specs-v1.yaml) â€” OpenAPI spec for the citations API
 
 ## Documentation status
 

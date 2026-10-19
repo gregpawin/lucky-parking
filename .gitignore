@@ -38,9 +38,13 @@ node_modules/
 
 # Testing
 coverage/
+**/.pytest_cache/
+**/__pycache__/
 
 # TypeScript
 **/*.tsbuildinfo
 
 # Local datasets (the raw citations CSV is multi-GB)
 raw_data/
+**/dumps/
+docs/.workflow-slides-build/
